@@ -37,4 +37,18 @@ class UsersController < ApplicationController
       redirect_to users_path, :notice => "Can't delete yourself."
     end
   end
+  
+  def show_comments
+    @user = User.find(params[:id])
+    
+    @comments = @user.comments
+    @comments.each do |comment|
+      comment["name"] = comment.court.name
+    end
+    respond_to do |format|
+      format.json {
+        render :json => @comments.to_json
+      }
+    end
+  end
 end
